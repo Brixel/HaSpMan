@@ -14,7 +14,7 @@ public class TransactionForm
         Counterparty = new AutocompleteCounterparty(string.Empty, null);
         TransactionTypeAmounts = new List<TransactionTypeAmountForm>()
         {
-            new(TransactionType.CreditWorkshopFee, 0)
+            new()
         };
     }
 
@@ -27,6 +27,7 @@ public class TransactionForm
     [Required]
     public DateTime? ReceivedDateTime { get; set; }
 
+    [Required]
     public string? Description { get; set; }
 
     [ValidateComplexType]
@@ -35,16 +36,16 @@ public class TransactionForm
 
 public class TransactionTypeAmountForm
 {
-    public TransactionTypeAmountForm(TransactionType transactionType, decimal amount)
-    {
-        TransactionType = transactionType;
-        Amount = amount;
-    }
+    // public TransactionTypeAmountForm(TransactionType transactionType, decimal amount)
+    // {
+    //     TransactionType = transactionType;
+    //     Amount = amount;
+    // }
     [Required]
-    public TransactionType TransactionType { get; set; }
+    public TransactionType? TransactionType { get; set; }
 
 
     [Required]
     [Range(0, 10000000)]
-    public decimal Amount { get; set; }
+    public decimal? Amount { get; set; }
 }
