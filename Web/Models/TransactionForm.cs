@@ -42,10 +42,10 @@ public class TransactionTypeAmountForm
     //     Amount = amount;
     // }
     [Required]
-    public TransactionType? TransactionType { get; set; }
+    public TransactionType TransactionType { get; set; }
 
 
     [Required]
-    [Range(0, 10000000)]
+    [Range(1, 10000000)]
     public decimal? Amount { get; set; }
 }

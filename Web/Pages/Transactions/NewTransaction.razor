@@ -14,11 +14,12 @@
 <EditForm Model="@_newTransaction" OnValidSubmit="@AddTransaction" OnInvalidSubmit="@ShowError">
     <DataAnnotationsValidator />
 
-    <TransactionForm IsNew="true" IsSearchForMembership="false" Transaction="@_newTransaction" TransactionTypeGroup="@_selectedTransactionTypeGroup" />
+    <TransactionForm IsNew="true" IsSearchForMembership="false" Transaction="@_newTransaction"
+        TransactionTypeGroup="@_selectedTransactionTypeGroup" />
 
     <MudItem xs="12" Class="d-flex justify-center">
         <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8"
-                   ButtonType="ButtonType.Submit">Add transaction</MudButton>
+            ButtonType="ButtonType.Submit">Add transaction</MudButton>
     </MudItem>
 </EditForm>
 
@@ -32,17 +33,17 @@
         switch (_selectedTransactionTypeGroup)
         {
             case TransactionTypeGroup.Credit:
-            {
-                var command = _mapper.Map<AddCreditTransactionCommand>(_newTransaction);
-                await _mediator.Send(command);
-                break;
-            }
+                {
+                    var command = _mapper.Map<AddCreditTransactionCommand>(_newTransaction);
+                    await _mediator.Send(command);
+                    break;
+                }
             case TransactionTypeGroup.Debit:
-            {
-                var command = _mapper.Map<AddDebitTransactionCommand>(_newTransaction);
-                await _mediator.Send(command);
-                break;
-            }
+                {
+                    var command = _mapper.Map<AddDebitTransactionCommand>(_newTransaction);
+                    await _mediator.Send(command);
+                    break;
+                }
         }
 
         Snackbar.Clear();

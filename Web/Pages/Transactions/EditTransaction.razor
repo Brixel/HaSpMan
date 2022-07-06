@@ -37,7 +37,7 @@
         var query = new GetTransactionByIdQuery(TransactionId);
         var memberDetail = await _mediator.Send(query);
         Transaction = _mapper.Map<Models.TransactionForm>(memberDetail);
-        _transactionTypeGroup = GetTransactionTypeGroup(Transaction.TransactionTypeAmounts.First().TransactionType!.Value);
+        _transactionTypeGroup = GetTransactionTypeGroup(Transaction.TransactionTypeAmounts.First().TransactionType);
     }
 
     private TransactionTypeGroup GetTransactionTypeGroup(TransactionType transactionType)
@@ -63,7 +63,7 @@
             ReceivedDateTime: new DateTimeOffset(Transaction.ReceivedDateTime!.Value),
             Description: Transaction.Description!,
             TransactionTypeAmounts: Transaction.TransactionTypeAmounts
-                .Select(x => new TransactionTypeAmount(x.TransactionType!.Value, x.Amount!.Value))
+                .Select(x => new TransactionTypeAmount(x.TransactionType, x.Amount!.Value))
                 .ToList()
             );
         var response = await _mediator.Send(command);

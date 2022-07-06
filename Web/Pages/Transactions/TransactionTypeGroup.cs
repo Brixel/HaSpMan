@@ -4,7 +4,7 @@ namespace Web.Pages.Transactions
 {
     public enum TransactionTypeGroup
     {
-        [Description("Debet")]
+        [Description("Debit")]
         Debit,
         [Description("Credit")]
         Credit
