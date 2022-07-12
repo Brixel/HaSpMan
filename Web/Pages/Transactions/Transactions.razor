@@ -44,7 +44,7 @@
     <RowTemplate>
         <MudTd DataLabel="From">@context.CounterPartyName</MudTd>
         <MudTd DataLabel="Amount">€@context.Amount</MudTd>
-        <MudTd DataLabel="ReceivedDateTime">@context.ReceivedDateTime.ToString("d")</MudTd>
+        <MudTd DataLabel="ReceivedDateTime">@context.ReceivedDateTime.ToString("dd-MM-yyyy")</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
         <MudTd DataLabel="Transaction types">
             @foreach (var type in context.TransactionTypeAmounts)
