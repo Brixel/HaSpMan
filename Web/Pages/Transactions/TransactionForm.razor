@@ -12,7 +12,7 @@
             {
                 <MudGrid>
                     <MudItem xs="6">
-                        <MudRadioGroup SelectedOption="TransactionTypeGroup" SelectedOptionChanged="OnChangeTypeGroup"
+                        <MudRadioGroup Value="TransactionTypeGroup" ValueChanged="OnChangeTypeGroup"
                                        T="TransactionTypeGroup">
                             @foreach (var transactionTypeGroup in Enum.GetValues<TransactionTypeGroup>())
                             {
@@ -36,7 +36,7 @@
         <MudCardContent>
             <MudGrid Class="flex-wrap" Justify="Justify.SpaceBetween" Spacing="2">
                 <MudItem xs="2">
-                    <MudRadioGroup T="Boolean" @bind-SelectedValue="IsSearchForMembership">
+                    <MudRadioGroup Value="IsSearchForMembership">
                         <MudRadio Value="false">Non-members</MudRadio>
                         <MudRadio Value="true">Members</MudRadio>
                     </MudRadioGroup>
@@ -179,7 +179,7 @@
 
                 <MudGrid>
                     <MudDatePicker Label="New expiration month" @bind-Date="Transaction.NewMembershipExpirationDate"
-                                   DisableToolbar="true" DateFormat="dd/MM/yyyy" MinDate="DateTime.Today" />
+                                   ShowToolbar="false" DateFormat="dd/MM/yyyy" MinDate="DateTime.Today" />
                 </MudGrid>
             }
 
@@ -206,7 +206,7 @@
     </MudCard>
     <MudCard class="mb-6 mt-2 pb-3 expand">
         <MudCardHeader>
-            <MudText Type="Typo.h5">Attachments</MudText>
+            <MudText Typo="Typo.h5">Attachments</MudText>
         </MudCardHeader>
         <MudCardContent>
             <InputFile hidden id="attachmentFilePicker" multiple OnChange="UploadFiles" />
