@@ -16,7 +16,7 @@
                                        T="TransactionTypeGroup">
                             @foreach (var transactionTypeGroup in Enum.GetValues<TransactionTypeGroup>())
                             {
-                                <MudRadio Option="transactionTypeGroup">@transactionTypeGroup.GetDescription()</MudRadio>
+                                <MudRadio Value="transactionTypeGroup">@transactionTypeGroup.GetDescription()</MudRadio>
                             }
                         </MudRadioGroup>
                     </MudItem>
@@ -36,9 +36,9 @@
         <MudCardContent>
             <MudGrid Class="flex-wrap" Justify="Justify.SpaceBetween" Spacing="2">
                 <MudItem xs="2">
-                    <MudRadioGroup @bind-SelectedOption="IsSearchForMembership">
-                        <MudRadio Option="false">Non-members</MudRadio>
-                        <MudRadio Option="true">Members</MudRadio>
+                    <MudRadioGroup T="Boolean" @bind-SelectedValue="IsSearchForMembership">
+                        <MudRadio Value="false">Non-members</MudRadio>
+                        <MudRadio Value="true">Members</MudRadio>
                     </MudRadioGroup>
                 </MudItem>
                 <MudItem xs="3">
@@ -127,7 +127,7 @@
                                    MinDate="MinReceivedDateTime" MaxDate="DateTime.Now" For="@(() => Transaction.ReceivedDateTime)" @ref="_picker"
                                    Disabled="@(Transaction.FinancialYearId == null)">
                         <PickerActions>
-                            <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">
+                            <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.ClearAsync())">
                                 Clear
                             </MudButton>
                         </PickerActions>
@@ -171,7 +171,7 @@
             </MudText>
             @if (CanExtendMembership && SelectedMember != null)
             {
-                <MudCheckBox Color="Color.Secondary" @bind-Checked="Transaction.ApplyMembershipCalculation">
+                <MudCheckBox Color="Color.Secondary" @bind-Value="Transaction.ApplyMembershipCalculation">
                     Extend
                     membership for @SelectedMember.FirstName: @SelectedMember.MembershipFee.ToString("C", CultureInfo.CurrentUICulture). This gives @AmountOfMonths
                     more month(s) of membership
@@ -186,7 +186,7 @@
         </MudCardContent>
     </MudCard>
     <MudCard class="mb-6 mt-2 pb-3 expand">
-        <MudList Clickable="true">
+        <MudList T="string">
             <MudListSubheader>
                 Attachments
             </MudListSubheader>
@@ -198,7 +198,7 @@
             }
             @foreach (var attachment in Transaction.TransactionAttachments)
             {
-                <MudListItem Icon="@Icons.Material.Outlined.Save" OnClick="() => Download(attachment.FileName)">
+                <MudListItem  Icon="@Icons.Material.Outlined.Save" OnClick="() => Download(attachment.FileName)">
                     @attachment.FileName
                 </MudListItem>
             }

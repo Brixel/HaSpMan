@@ -29,7 +29,7 @@
     private MessageForm _messageForm = new();
 
     [CascadingParameter]
-    MudDialogInstance? MudDialog { get; set; }
+    IMudDialogInstance? MudDialog { get; set; }
 
     void Submit()
     {
