@@ -12,11 +12,11 @@
           Dense="true"
           Hover="true"
           @ref="table"
-          ServerData="@(new Func<TableState, Task<TableData<FinancialYear>>>(ServerReload))">
+          ServerData="ServerReload">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Financial years</MudText>
         <MudSpacer />
-        <MudButton Class="ma-2" Color="Color.Primary" DisableElevation="true" OnClick="@AddFinancialYear" Size="Size.Small"
+        <MudButton Class="ma-2" Color="Color.Primary" DropShadow="false" OnClick="@AddFinancialYear" Size="Size.Small"
                    Variant="Variant.Filled">
             Add Financial Year
         </MudButton>
@@ -70,12 +70,12 @@
 @code {
     private MudTable<FinancialYear>? table;
 
-    private async Task<TableData<FinancialYear>> ServerReload(TableState state)
+    private async Task<TableData<FinancialYear>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         StateHasChanged();
 
         var query = new GetFinancialYearsQuery();
-        var data = await _mediator.Send(query);
+        var data = await _mediator.Send(query, cancellationToken);
 
         return new TableData<FinancialYear>()
         {
@@ -98,7 +98,7 @@
         };
         var reference = await DialogService.ShowAsync<CloseFinancialYearDialog>($"Close financial year", parameters, options);
         var dialog = await reference.Result;
-        if (!dialog.Canceled)
+        if (dialog is { Canceled: false })
         {
             Snackbar.Clear();
             Snackbar.Add($"Closed financial year {financialYear.StartDateTimeOffset.Year} - {financialYear.EndDateTimeOffset.Year}");

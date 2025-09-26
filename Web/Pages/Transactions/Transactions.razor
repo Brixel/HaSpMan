@@ -10,7 +10,7 @@
 @inject IMediator _mediator
 
 <MudTable Class="mt-10" Dense="true" Hover="true" @ref="table"
-    ServerData="@(new Func<TableState, Task<TableData<TransactionSummary>>>(ServerReload))" RowStyleFunc="RowStyleFunc">
+          ServerData="ServerReload" RowStyleFunc="RowStyleFunc">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Transactions</MudText>
         <MudSpacer />
@@ -18,7 +18,7 @@
             IconSize="Size.Medium" Placeholder="Search" T="string" ValueChanged="@(OnSearch)">
         </MudTextField>
         <MudSpacer />
-        <MudButton Class="ma-2" Color="Color.Primary" DisableElevation="true" Href="/transactions/new" Size="Size.Small"
+        <MudButton Class="ma-2" Color="Color.Primary" DropShadow="false" Href="/transactions/new" Size="Size.Small"
             Variant="Variant.Filled">
             Add transaction
         </MudButton>
@@ -70,7 +70,7 @@
         <MudTd DataLabel="Transaction types">
             @foreach (var type in context.TransactionTypeAmounts)
             {
-                <MudChip>@type.TransactionType.GetDescription() for @type.Amount.ToString("C", CultureInfo.CurrentUICulture)</MudChip>
+                <MudChip T="string">@type.TransactionType.GetDescription() for @type.Amount.ToString("C", CultureInfo.CurrentUICulture)</MudChip>
             }
         </MudTd>
         <MudTd>
@@ -107,7 +107,7 @@
     private MudTable<TransactionSummary>? table;
     private string searchString = "";
 
-    private async Task<TableData<TransactionSummary>> ServerReload(TableState state)
+    private async Task<TableData<TransactionSummary>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         TransactionSummaryOrderOption orderBy = state.SortLabel switch
         {
@@ -118,7 +118,7 @@
         };
         var sortDirection = (Queries.Enums.SortDirection)(int)state.SortDirection;
         var query = new GetTransactionQuery(searchString, state.Page, state.PageSize, orderBy, sortDirection);
-        var data = await _mediator.Send(query);
+        var data = await _mediator.Send(query, cancellationToken);
 
         return new TableData<TransactionSummary>()
             {

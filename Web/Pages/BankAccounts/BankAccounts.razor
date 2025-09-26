@@ -6,7 +6,7 @@
 @inject IMediator _mediator
 
 <MudTable Class="mt-10 mw-9" Dense="true" Hover="true" @ref="table"
-    ServerData="@(new Func<TableState, Task<TableData<BankAccountDetailWithTotal>>>(ServerReload))">
+          ServerData="ServerReload">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Bankaccounts</MudText>
         <MudSpacer />
@@ -14,7 +14,7 @@
             IconSize="Size.Medium" Placeholder="Search" T="string" ValueChanged="@(s => OnSearch(s))">
         </MudTextField>
         <MudSpacer />
-        <MudButton Class="ma-2" Color="Color.Primary" DisableElevation="true" Href="/bankaccounts/new" Size="Size.Small"
+        <MudButton Class="ma-2" Color="Color.Primary" DropShadow="false" Href="/bankaccounts/new" Size="Size.Small"
             Variant="Variant.Filled">
             Add bankaccount
         </MudButton>
@@ -73,7 +73,7 @@
     private MudTable<BankAccountDetailWithTotal>? table;
     private string searchString = "";
 
-    private async Task<TableData<BankAccountDetailWithTotal>> ServerReload(TableState state)
+    private async Task<TableData<BankAccountDetailWithTotal>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         StateHasChanged();
 
@@ -85,7 +85,7 @@
         };
         var sortDirection = (Queries.Enums.SortDirection)(int)state.SortDirection;
         var query = new SearchBankAccountsQuery(searchString, state.Page, state.PageSize, orderBy, sortDirection);
-        var data = await _mediator.Send(query);
+        var data = await _mediator.Send(query, cancellationToken);
 
         return new TableData<BankAccountDetailWithTotal>()
             {

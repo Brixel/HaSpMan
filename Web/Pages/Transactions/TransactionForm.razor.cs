@@ -93,19 +93,19 @@ public partial class TransactionForm : ComponentBase
     private readonly IReadOnlyList<string> _allowedFileTypes = new List<string> {
         "pdf", "doc", "docx", "jpg", "jpeg", "png", "gif" };
 
-    private async Task<IEnumerable<AutocompleteCounterparty>> SearchForMembers(string searchString)
+    private async Task<IEnumerable<AutocompleteCounterparty>> SearchForMembers(string searchString, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(searchString))
         {
             return new List<AutocompleteCounterparty>();
         }
-        var response = await Mediator.Send(new AutocompleteCounterpartyQuery(searchString, true));
+        var response = await Mediator.Send(new AutocompleteCounterpartyQuery(searchString, true), cancellationToken);
         return response.Counterparties;
     }
 
-    private async Task<IEnumerable<AutocompleteCounterparty>> SearchForNonMembers(string searchString)
+    private async Task<IEnumerable<AutocompleteCounterparty>> SearchForNonMembers(string searchString, CancellationToken cancellationToken)
     {
-        var response = await Mediator.Send(new AutocompleteCounterpartyQuery(searchString, false));
+        var response = await Mediator.Send(new AutocompleteCounterpartyQuery(searchString, false), cancellationToken);
 
         return response.Counterparties;
     }
@@ -122,9 +122,9 @@ public partial class TransactionForm : ComponentBase
 
     private async Task OpenAddBankAccountDialog()
     {
-        var dialog = DialogService.Show<AddBankAccountDialog>("Add bank account");
+        var dialog = await DialogService.ShowAsync<AddBankAccountDialog>("Add bank account");
         var result = await dialog.Result;
-        if (!result.Canceled && result.Data is true)
+        if ((result is { Canceled: true, Data: true }))
         {
             await GetAllBankAccounts();
         }

@@ -1,7 +1,7 @@
 ﻿@using Commands.Handlers.FinancialYear.CloseFinancialYear
 @using Queries.FinancialYears
 
-@inject IMediator _mediatr
+@inject IMediator _mediator
 
 <MudDialog>
     <DialogContent>
@@ -16,7 +16,7 @@
 @code {
 
     [CascadingParameter]
-    MudDialogInstance MudDialog { get; set; } = null!;
+    IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter]
     public FinancialYear FinancialYear { get; set; } = null!;
@@ -24,7 +24,7 @@
     private async Task Submit()
     {
 
-        await _mediatr.Send(new CloseFinancialYearCommand(FinancialYear.Id));
+        await _mediator.Send(new CloseFinancialYearCommand(FinancialYear.Id));
         MudDialog.Close(true);
     }
 

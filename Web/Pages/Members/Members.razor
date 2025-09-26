@@ -12,7 +12,7 @@
 @inject ISnackbar Snackbar
 
 <MudTable Class="mt-10 mw-13" Dense="true" Hover="true" @ref="_table"
-    ServerData="@(new Func<TableState, Task<TableData<MemberSummary>>>(ServerReload))" MultiSelection="true"
+          ServerData="ServerReload" MultiSelection="true"
     @bind-SelectedItems="_selectedMembers">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Members</MudText>
@@ -20,14 +20,14 @@
         <MudTextField Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
             @bind-Value="@SearchString" Class="mt-0" IconSize="Size.Medium" Placeholder="Search" T="string">
         </MudTextField>
-        <MudSwitch @bind-Checked="@ShowActive" Label="Active" Color="Color.Success" T="bool" />
-        <MudSwitch @bind-Checked="@ShowInactive" Label="Inactive" Color="Color.Error" T="bool" />
+        <MudSwitch @bind-Value="@ShowActive" Label="Active" Color="Color.Success" T="bool" />
+        <MudSwitch @bind-Value="@ShowInactive" Label="Inactive" Color="Color.Error" T="bool" />
         <MudSpacer />
-        <MudButton Class="ma-2" DisableElevation="true" Size="Size.Small" Variant="Variant.Outlined"
+        <MudButton Class="ma-2" DropShadow="false" Size="Size.Small" Variant="Variant.Outlined"
             Disabled="@(!_selectedMembers.Any())" @onclick="OpenSendEmailDialog">
             Email selected members
         </MudButton>
-        <MudButton Class="ma-2" Color="Color.Primary" DisableElevation="true" Href="/members/new" Size="Size.Small"
+        <MudButton Class="ma-2" Color="Color.Primary" DropShadow="false" Href="/members/new" Size="Size.Small"
             Variant="Variant.Filled">
             Add member
         </MudButton>
@@ -143,7 +143,7 @@
 
     private HashSet<MemberSummary> _selectedMembers = new();
 
-    private async Task<TableData<MemberSummary>> ServerReload(TableState state)
+    private async Task<TableData<MemberSummary>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         StateHasChanged();
         MemberSummaryOrderOption orderBy = state.SortLabel switch
@@ -159,7 +159,7 @@
         var sortDirection = (Queries.Enums.SortDirection)(int)state.SortDirection;
         var query = new SearchMembersQuery(_searchString, ShowActive, _showInactive, state.Page, state.PageSize, orderBy,
         sortDirection);
-        var data = await _mediator.Send(query);
+        var data = await _mediator.Send(query, cancellationToken);
 
         return new TableData<MemberSummary>()
             {
@@ -175,9 +175,9 @@
             {
                 ["member"] = member
             };
-        var reference = DialogService.Show<DeleteMemberDialog>($"Remove member", parameters, options);
+        var reference = await DialogService.ShowAsync<DeleteMemberDialog>($"Remove member", parameters, options);
         var dialog = await reference.Result;
-        if (!dialog.Canceled)
+        if (dialog is { Canceled:false })
         {
             Snackbar.Clear();
             Snackbar.Add($"Removed {member.Name} as a member");
@@ -197,9 +197,9 @@
 
     private async Task OpenSendEmailDialog()
     {
-        var dialog = DialogService.Show<EmailMembersDialog>($"Email {_selectedMembers.Count} selected members");
+        var dialog = await DialogService.ShowAsync<EmailMembersDialog>($"Email {_selectedMembers.Count} selected members");
         var result = await dialog.Result;
-        if (!result.Canceled && result.Data is Message)
+        if (result is { Canceled: false, Data: Message })
         {
             var message = (Message)result.Data;
             var memberIds = _selectedMembers
