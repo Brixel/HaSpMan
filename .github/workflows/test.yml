@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: dotnet test --verbosity normal --logger "trx;LogFileName=test-results.trx"
       - name: Test Reporter
-        uses: dorny/test-reporter@v1.6.0
+        uses: dorny/test-reporter@v1.9.1
         if: success() || failure()
         with:
           name: .NET Tests

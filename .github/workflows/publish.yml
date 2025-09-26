@@ -60,7 +60,7 @@ jobs:
           git config user.name "Helm chart releaser"
           git config user.email "helm-chart-releaser@users.noreply.github.com"
       - name: Publish helm chart
-        uses: helm/chart-releaser-action@v1.5.0
+        uses: helm/chart-releaser-action@v1.7.0
         with:
           charts_dir: Infrastructure/helm-charts
         env:
