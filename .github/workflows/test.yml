@@ -6,6 +6,19 @@ on:
     branches: [master]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout
+       uses: actions/checkout@4
+       with:
+         fetch-dept: 0
+     - name: Docker build
+       id: docker_build
+       uses: docker/build-push-action@v5
+       with:
+         context: .
+         file: HaSpMan.Web.Dockerfile
   test:
     runs-on: ubuntu-latest
     steps:
