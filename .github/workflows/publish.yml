@@ -24,12 +24,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.13.6
+        uses: gittools/actions/gitversion/setup@v4.1.0
         with:
           versionSpec: "5.x"
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.13.6
+        uses: gittools/actions/gitversion/execute@v4.1.0
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
