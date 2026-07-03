@@ -1,6 +1,7 @@
 using AutoMapper;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using Moq;
 
@@ -15,13 +16,12 @@ public class MappingTests
     private readonly IMapper _mapper;
     public MappingTests()
     {
-        var mock = new Mock<ILoggerFactory> ();
         var config = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<MemberProfile>();
             cfg.AddProfile<TransactionProfile>();
             cfg.AddProfile<BankAccountProfile>();
-        }, mock.Object);
+        }, NullLoggerFactory.Instance);
 
         _mapper = new Mapper(config);
     }
