@@ -25,7 +25,7 @@ jobs:
        uses: gittools/actions/gitversion/execute@v0.13.6
      - name: Extract metadata (tags, labels) for Docker
        id: meta
-       uses: docker/metadata-action@v5
+       uses: docker/metadata-action@v6
        with:
          images: ${{ env.REGISTRY }}/brixel/haspman-main
          tags: type=semver,pattern={{version}},value=${{ steps.gitversion.outputs.semVer }}
