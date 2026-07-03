@@ -16,7 +16,7 @@ public class MappingTests
             cfg.AddProfile<MemberProfile>();
             cfg.AddProfile<TransactionProfile>();
             cfg.AddProfile<BankAccountProfile>();
-        });
+        }, null);
 
         _mapper = new Mapper(config);
     }
