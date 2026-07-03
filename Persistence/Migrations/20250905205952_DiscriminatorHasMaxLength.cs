@@ -10,6 +10,8 @@ namespace Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql($@"DROP VIEW IF EXISTS HaSpMan.vwBankAccountTotals");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Discriminator",
                 schema: "HaSpMan",
@@ -19,6 +21,22 @@ namespace Persistence.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
+
+            migrationBuilder.Sql($@"CREATE OR ALTER VIEW HaSpMan.vwBankAccountTotals
+                                        WITH SCHEMABINDING
+                                        AS
+                                            SELECT
+                                                SUM(
+                                                    CASE t.Discriminator
+                                                        WHEN 'CreditTransaction' THEN t.Amount * -1
+                                                        ELSE t.Amount
+                                                    END
+                                                ) AS Amount,
+                                                t.BankAccountId,
+                                                COUNT_BIG(*) AS NumberOfTransactions
+                                            FROM
+                                                HaSpMan.Transactions t
+                                                GROUP BY t.BankAccountId");
         }
 
         /// <inheritdoc />
