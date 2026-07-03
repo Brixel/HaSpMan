@@ -54,7 +54,7 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v5
         with:
-          version: v3.8.1
+          version: v3.21.2
       - name: Configure Git
         run: |
           git config user.name "Helm chart releaser"
