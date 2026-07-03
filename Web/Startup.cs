@@ -60,6 +60,7 @@ public class Startup
         services.AddScoped<IAttachmentStorage, AttachmentStorage>();
         services.AddScoped<IFinancialYearRepository, FinancialYearRepository>();
         services.AddAutoMapper(
+            o => o.LicenseKey = "",
             typeof(MapperProfiles.MemberProfile),
             typeof(MapperProfiles.TransactionProfile),
             typeof(Queries.MapperProfiles.MemberProfile),

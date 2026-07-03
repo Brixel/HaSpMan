@@ -1,5 +1,10 @@
 using AutoMapper;
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+
+using Moq;
+
 using Queries.MapperProfiles;
 
 using Xunit;
@@ -16,7 +21,7 @@ public class MappingTests
         {
             cfg.AddProfile<MemberProfile>();
             cfg.AddProfile<TransactionProfile>();
-        });
+        }, NullLoggerFactory.Instance);
 
         _mapper = new Mapper(config);
     }
