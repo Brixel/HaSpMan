@@ -1,5 +1,9 @@
 using AutoMapper;
 
+using Microsoft.Extensions.Logging;
+
+using Moq;
+
 using Queries.MapperProfiles;
 
 using Xunit;
@@ -12,11 +16,12 @@ public class MappingTests
 
     public MappingTests()
     {
+        var mockedLoggerFactory = new Mock<ILoggerFactory>();
         var config = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<MemberProfile>();
             cfg.AddProfile<TransactionProfile>();
-        });
+        }, mockedLoggerFactory.Object);
 
         _mapper = new Mapper(config);
     }
