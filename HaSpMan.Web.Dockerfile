@@ -17,4 +17,3 @@ WORKDIR /app
 COPY --from=build /app .
 
 ENTRYPOINT ["dotnet", "Web.dll"]
-EXPOSE 443
