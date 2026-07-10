@@ -217,7 +217,7 @@ public partial class TransactionForm : ComponentBase
             .SingleOrDefault(x => x.TransactionType == TransactionType.DebitMemberFee);
 
         if (transactionTypeForMembershipFee != null &&
-            transactionTypeForMembershipFee.Amount is not null or 0 &&
+            transactionTypeForMembershipFee.Amount is not null &&
             SelectedMember.MembershipExpiryDate.HasValue && SelectedMember.MembershipFee != 0)
         {
             AmountOfMonths = (int)Math.Floor((double)transactionTypeForMembershipFee.Amount / SelectedMember.MembershipFee);
