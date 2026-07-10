@@ -12,7 +12,7 @@ public class UserAccessor : IUserAccessor
         _accessor = accessor ?? throw new ArgumentException("Valid IHttpContextAccessor is needed", nameof(accessor));
     }
 
-    public ClaimsPrincipal User => _accessor.HttpContext.User;
+    public ClaimsPrincipal User => _accessor.HttpContext?.User!;
 }
 
 public interface IUserAccessor
