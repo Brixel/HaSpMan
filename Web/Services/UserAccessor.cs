@@ -1,8 +1,6 @@
 using System.Security.Claims;
 
-using Microsoft.AspNetCore.Http;
-
-namespace Commands.Services;
+namespace Web.Services;
 
 public class UserAccessor : IUserAccessor
 {

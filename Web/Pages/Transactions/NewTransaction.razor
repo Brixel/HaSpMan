@@ -3,10 +3,13 @@
 @using Commands.Handlers.Member.ExtendMembership
 @using Commands.Handlers.Transaction.AddCreditTransaction
 @using Commands.Handlers.Transaction.AddDebitTransaction
+@using Web.Extensions
+@using Web.Services
 @inject IMediator Mediator
 @inject IMapper Mapper
 @inject ISnackbar Snackbar
 @inject NavigationManager NavManager
+@inject IUserAccessor UserAccessor
 
 <h1 class="my-6">Create transaction</h1>
 
@@ -39,6 +42,7 @@
 
     private async Task AddTransaction()
     {
+        var username = UserAccessor.User.GetName()!;
         var memberId = _newTransaction.Counterparty.MemberId;
         var expirationDate = _newTransaction.NewMembershipExpirationDate;
         var newTransactionApplyMembershipCalculation = _newTransaction.ApplyMembershipCalculation;
@@ -59,7 +63,7 @@
         }
         if (memberId.HasValue && expirationDate.HasValue && newTransactionApplyMembershipCalculation)
         {
-            await Mediator.Send(new ExtendMembershipCommand(memberId.Value, expirationDate.Value));
+            await Mediator.Send(new ExtendMembershipCommand(memberId.Value, expirationDate.Value, username));
         }
         Snackbar.Clear();
         Snackbar.Add($"Transaction for {_newTransaction.Counterparty.Name} added successfully!", Severity.Success);

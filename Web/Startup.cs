@@ -20,6 +20,7 @@ using Persistence.Repositories;
 using Queries.Members.Handlers.SearchMembers;
 
 using Web.Extensions;
+using Web.Services;
 
 namespace Web;
 

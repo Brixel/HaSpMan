@@ -1,6 +1,3 @@
-using Commands.Extensions;
-using Commands.Services;
-
 using Domain.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +9,11 @@ namespace Commands.Handlers.Member.AddMember;
 public class AddMemberHandler : IRequestHandler<AddMemberCommand, Guid>
 {
     private readonly IMemberRepository _memberRepository;
-    private readonly IUserAccessor _userAccessor;
     private readonly HaSpManContext _dbContext;
 
-    public AddMemberHandler(IMemberRepository memberRepository, IUserAccessor userAccessor, HaSpManContext dbContext)
+    public AddMemberHandler(IMemberRepository memberRepository, HaSpManContext dbContext)
     {
         _memberRepository = memberRepository;
-        _userAccessor = userAccessor;
         _dbContext = dbContext;
     }
 
@@ -31,7 +26,7 @@ public class AddMemberHandler : IRequestHandler<AddMemberCommand, Guid>
             lastName: request.LastName,
             address: request.Address,
             membershipFee: request.MembershipFee,
-            performedBy: _userAccessor.User.GetName() ?? throw new Exception("Command performed by user with no name"),
+            performedBy: request.PerformingUser,
             membershipExpiryDate: request.MembershipExpiryDate,
             email: request.Email,
             phoneNumber: request.PhoneNumber
