@@ -14,10 +14,7 @@ public class BankAccountProfile : Profile
 {
     public BankAccountProfile()
     {
-        CreateMap<BankAccountForm, AddBankAccountCommand>()
-            .ForCtorParam(nameof(AddBankAccountCommand.Name), o => o.MapFrom(src => src.Name))
-            .ForCtorParam(nameof(AddBankAccountCommand.AccountNumber), o => o.MapFrom(src => src.AccountNumber));
-
+        
         CreateMap<BankAccountDetail, BankAccountForm>();
 
         CreateMap<BankAccount, BankAccountDetail>()
