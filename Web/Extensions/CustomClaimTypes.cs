@@ -1,4 +1,4 @@
-namespace Commands.Extensions;
+namespace Web.Extensions;
 
 public static class CustomClaimTypes
 {

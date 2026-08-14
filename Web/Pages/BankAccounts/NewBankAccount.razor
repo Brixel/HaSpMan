@@ -2,10 +2,13 @@
 @attribute [Authorize]
 
 @using Commands.Handlers.BankAccount.AddBankAccount
+@using Web.Extensions
+@using Web.Services
 @inject IMediator _mediator
 @inject IMapper _mapper
 @inject ISnackbar Snackbar
 @inject NavigationManager NavManager
+@inject IUserAccessor UserAccessor
 
 <h1 class="my-6">Add new bankaccount</h1>
 
@@ -33,7 +36,9 @@
 
     private async Task AddBankAccount()
     {
-        var command = _mapper.Map<AddBankAccountCommand>(_newBankAccount);
+        var performingUser = UserAccessor.User.GetName()!;
+
+        var command = new AddBankAccountCommand(_newBankAccount.Name, _newBankAccount.AccountNumber, performingUser);
         var response = await _mediator.Send(command);
         Snackbar.Clear();
         Snackbar.Add($"Bankaccount {_newBankAccount.Name} added successfully!", Severity.Success);

@@ -2,7 +2,7 @@
 
 namespace Commands.Handlers.Member.ExtendMembership;
 
-public record ExtendMembershipCommand(Guid Id, DateTime NewMembershipExpirationDate) : IRequest;
+public record ExtendMembershipCommand(Guid Id, DateTime NewMembershipExpirationDate, string PerformingUser) : IRequest;
 
 public class ExtendMembershipCommandValidator : AbstractValidator<ExtendMembershipCommand>
 {
@@ -11,6 +11,8 @@ public class ExtendMembershipCommandValidator : AbstractValidator<ExtendMembersh
         RuleFor(x => x.Id)
             .NotEmpty();
         RuleFor(x => x.NewMembershipExpirationDate)
+            .NotEmpty();
+        RuleFor(x => x.PerformingUser)
             .NotEmpty();
     }
 }

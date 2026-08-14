@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="15.1.3" />
-    <PackageReference Include="LinqKit" Version="1.3.11" />
-    <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="LinqKit" />
+    <PackageReference Include="MediatR" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>
-
 </Project>

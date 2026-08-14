@@ -11,7 +11,8 @@ public record AddMemberCommand(
     string Email,
     string PhoneNumber,
     double MembershipFee,
-    DateTimeOffset MembershipExpiryDate
+    DateTimeOffset MembershipExpiryDate,
+    string PerformingUser
 ) : IRequest<Guid>;
 
 public class AddMemberCommandValidator : AbstractValidator<AddMemberCommand>
@@ -40,6 +41,9 @@ public class AddMemberCommandValidator : AbstractValidator<AddMemberCommand>
 
         RuleFor(x => x.MembershipFee)
            .GreaterThanOrEqualTo(0);
+
+        RuleFor(x => x.PerformingUser)
+            .NotEmpty();
     }
 
     public class AddMemberCommandAddressValidator : AbstractValidator<Address>

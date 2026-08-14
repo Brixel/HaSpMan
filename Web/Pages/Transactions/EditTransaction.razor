@@ -6,11 +6,13 @@
 @using Queries.Transactions.Handlers
 @using AttachmentFile = Commands.Handlers.AttachmentFile
 @using Web.Extensions
+@using Web.Services
 
 @inject IMediator Mediator
 @inject IMapper Mapper
 @inject ISnackbar Snackbar
 @inject NavigationManager NavManager
+@inject IUserAccessor UserAccessor
 
 <h1 class="my-6">Edit transaction</h1>
 
@@ -62,6 +64,8 @@
 
     private async Task SubmitTransaction()
     {
+        var username = UserAccessor.User.GetName()!;
+
         var memberId = Transaction.Counterparty.MemberId;
         var expirationDate = Transaction.NewMembershipExpirationDate;
         var applyCalculation = Transaction.ApplyMembershipCalculation;
@@ -81,9 +85,10 @@
             FinancialYearId: Transaction.FinancialYearId!.Value);
 
         await Mediator.Send(command);
+
         if (memberId.HasValue && expirationDate.HasValue && applyCalculation)
         {
-            await Mediator.Send(new ExtendMembershipCommand(memberId.Value, expirationDate.Value));
+            await Mediator.Send(new ExtendMembershipCommand(memberId.Value, expirationDate.Value, username));
         }
         Snackbar.Clear();
         Snackbar.Add("Transaction edited successfully!", Severity.Success);
