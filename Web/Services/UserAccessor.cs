@@ -1,8 +1,6 @@
 using System.Security.Claims;
 
-using Microsoft.AspNetCore.Http;
-
-namespace Commands.Services;
+namespace Web.Services;
 
 public class UserAccessor : IUserAccessor
 {
@@ -12,7 +10,7 @@ public class UserAccessor : IUserAccessor
         _accessor = accessor ?? throw new ArgumentException("Valid IHttpContextAccessor is needed", nameof(accessor));
     }
 
-    public ClaimsPrincipal User => _accessor.HttpContext.User;
+    public ClaimsPrincipal User => _accessor.HttpContext?.User!;
 }
 
 public interface IUserAccessor

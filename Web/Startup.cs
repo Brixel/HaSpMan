@@ -20,6 +20,7 @@ using Persistence.Repositories;
 using Queries.Members.Handlers.SearchMembers;
 
 using Web.Extensions;
+using Web.Services;
 
 namespace Web;
 
@@ -43,7 +44,7 @@ public class Startup
         services.Configure<ForwardedHeadersOptions>(options =>
         {
             options.ForwardedHeaders = ForwardedHeaders.All;
-            options.KnownNetworks.Clear();
+            options.KnownIPNetworks.Clear();
             options.KnownProxies.Clear();
         });
 

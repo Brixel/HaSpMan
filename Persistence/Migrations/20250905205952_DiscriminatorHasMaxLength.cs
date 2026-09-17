@@ -2,27 +2,27 @@
 
 #nullable disable
 
-namespace Persistence.Migrations
+namespace Persistence.Migrations;
+
+/// <inheritdoc />
+public partial class DiscriminatorHasMaxLength : Migration
 {
     /// <inheritdoc />
-    public partial class DiscriminatorHasMaxLength : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql($@"DROP VIEW IF EXISTS HaSpMan.vwBankAccountTotals");
+        migrationBuilder.Sql($@"DROP VIEW IF EXISTS HaSpMan.vwBankAccountTotals");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Discriminator",
-                schema: "HaSpMan",
-                table: "Transactions",
-                type: "nvarchar(21)",
-                maxLength: 21,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+        migrationBuilder.AlterColumn<string>(
+            name: "Discriminator",
+            schema: "HaSpMan",
+            table: "Transactions",
+            type: "nvarchar(21)",
+            maxLength: 21,
+            nullable: false,
+            oldClrType: typeof(string),
+            oldType: "nvarchar(max)");
 
-            migrationBuilder.Sql($@"CREATE OR ALTER VIEW HaSpMan.vwBankAccountTotals
+        migrationBuilder.Sql($@"CREATE OR ALTER VIEW HaSpMan.vwBankAccountTotals
                                         WITH SCHEMABINDING
                                         AS
                                             SELECT
@@ -37,20 +37,19 @@ namespace Persistence.Migrations
                                             FROM
                                                 HaSpMan.Transactions t
                                                 GROUP BY t.BankAccountId");
-        }
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterColumn<string>(
-                name: "Discriminator",
-                schema: "HaSpMan",
-                table: "Transactions",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(21)",
-                oldMaxLength: 21);
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.AlterColumn<string>(
+            name: "Discriminator",
+            schema: "HaSpMan",
+            table: "Transactions",
+            type: "nvarchar(max)",
+            nullable: false,
+            oldClrType: typeof(string),
+            oldType: "nvarchar(21)",
+            oldMaxLength: 21);
     }
 }

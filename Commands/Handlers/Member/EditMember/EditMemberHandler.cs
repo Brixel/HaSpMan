@@ -1,6 +1,3 @@
-using Commands.Extensions;
-using Commands.Services;
-
 using Domain.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +9,11 @@ namespace Commands.Handlers.Member.EditMember;
 public class EditMemberHandler : IRequestHandler<EditMemberCommand>
 {
     private readonly IMemberRepository _memberRepository;
-    private readonly IUserAccessor _userAccessor;
     private readonly HaSpManContext _dbContext;
 
-    public EditMemberHandler(IMemberRepository memberRepository, IUserAccessor userAccessor, HaSpManContext dbContext)
+    public EditMemberHandler(IMemberRepository memberRepository, HaSpManContext dbContext)
     {
         _memberRepository = memberRepository;
-        _userAccessor = userAccessor;
         _dbContext = dbContext;
     }
 
@@ -29,7 +24,7 @@ public class EditMemberHandler : IRequestHandler<EditMemberCommand>
 
         await EnsureMemberIsNotBecomeDuplicate(request, cancellationToken);
 
-        var performingUser = _userAccessor.User.GetName()!;
+        var performingUser = request.PerformingUser;
         member.ChangeAddress(request.Address, performingUser);
         member.ChangeEmail(request.Email, performingUser);
         member.ChangeMembershipExpiryDate(request.MembershipExpiryDate, performingUser);

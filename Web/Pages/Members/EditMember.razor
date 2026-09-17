@@ -6,10 +6,13 @@
 @using Queries.Members.Handlers.GetMemberById
 @using Queries.Members;
 @using MapperProfiles;
+@using Web.Extensions
+@using Web.Services
 @inject IMediator _mediator
 @inject IMapper _mapper
 @inject ISnackbar Snackbar
 @inject NavigationManager NavManager
+@inject IUserAccessor UserAccessor
 
 <h1 class="my-6">Edit member</h1>
 
@@ -45,6 +48,8 @@
         if (await EnsureMemberDoesNotBecomeDuplicate())
             return;
 
+        var username = UserAccessor.User.GetName()!;
+
         var command = new EditMemberCommand(
             Id: MemberId,
             FirstName: member.FirstName!,
@@ -60,7 +65,8 @@
             MembershipFee: member.MembershipFee,
             MembershipExpiryDate: member.MembershipExpiryDate == null
                 ? (DateTimeOffset?)null
-                : new DateTimeOffset(member.MembershipExpiryDate!.Value));
+                : new DateTimeOffset(member.MembershipExpiryDate!.Value),
+            PerformingUser: username);
 
         await _mediator.Send(command);
         Snackbar.Clear();

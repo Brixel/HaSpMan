@@ -4,12 +4,16 @@
 
 @using Commands.Handlers.Member.AddMember
 @using Queries.Members;
+@using Types
+@using Web.Extensions
 @using Web.MapperProfiles;
+@using Web.Services
 
 @inject IMediator _mediator
 @inject IMapper _mapper
 @inject ISnackbar Snackbar
 @inject NavigationManager NavManager
+@inject IUserAccessor UserAccessor
 
 <h1 class="my-6">Add new member</h1>
 
@@ -38,7 +42,14 @@
         if (await EnsureMemberIsNotDuplicate())
             return;
 
-        var command = _mapper.Map<AddMemberCommand>(_newMember);
+        var performingUser = UserAccessor.User?.GetName()!;
+
+        var command = new AddMemberCommand(_newMember.FirstName!, _newMember.LastName!, 
+            new Address(_newMember.Street!, _newMember.City!,
+                _newMember.Country!, _newMember.ZipCode!, _newMember.HouseNumber!), 
+            _newMember.Email!, _newMember.PhoneNumber!, 
+            _newMember.MembershipFee, _newMember.MembershipExpiryDate!.Value, performingUser);
+
         var response = await _mediator.Send(command);
         Snackbar.Clear();
         Snackbar.Add($"Member {_newMember.FirstName} {_newMember.LastName} added successfully!", Severity.Success);

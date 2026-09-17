@@ -1,9 +1,11 @@
 ﻿@using Web.Models
 @using Commands.Handlers.BankAccount.AddBankAccount
 @using MediatR
+@using Web.Extensions
+@using Web.Services
 
 @inject IMediator mediator; 
-
+@inject IUserAccessor UserAccessor
 <MudDialog>
     <DialogContent>
         <MudTextField @bind-Value="bankAccountForm.Name"
@@ -30,7 +32,9 @@
 
     async Task Submit()
     {
-        await mediator.Send(new AddBankAccountCommand(bankAccountForm.Name, bankAccountForm.AccountNumber));
+        var username = UserAccessor.User.GetName()!;
+
+        await mediator.Send(new AddBankAccountCommand(bankAccountForm.Name, bankAccountForm.AccountNumber, username));
         MudDialog?.Close(DialogResult.Ok(true));
     }
 

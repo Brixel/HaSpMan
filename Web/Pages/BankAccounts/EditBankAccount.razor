@@ -1,12 +1,14 @@
 @page "/bankaccounts/{BankAccountId:guid}/edit"
 @attribute [Authorize]
-@using Commands.Handlers.BankAccount.AddBankAccount
-@using Commands.Handlers.BankAccount.EditBankAccount;
+@using Commands.Handlers.BankAccount.EditBankAccount
 @using Queries.BankAccounts
+@using Web.Extensions
+@using Web.Services
 @inject IMediator _mediator
 @inject IMapper _mapper
 @inject ISnackbar Snackbar
 @inject NavigationManager NavManager
+@inject IUserAccessor UserAccessor
 
 
 <h1 class="my-6">Edit bankaccount</h1>
@@ -46,10 +48,13 @@
 
     private async Task SubmitBankAccount()
     {
+        var username = UserAccessor.User.GetName()!;
+
         var command = new EditBankAccountCommand(
             Id: BankAccountId,
             Name: _bankAccount.Name,
-            AccountNumber: _bankAccount.AccountNumber
+            AccountNumber: _bankAccount.AccountNumber,
+            PerformingUser: username
             );
         var response = await _mediator.Send(command);
         Snackbar.Clear();
